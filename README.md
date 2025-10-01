@@ -69,7 +69,6 @@ muestra_aleatoria.to_csv("outputs/muestra_aleatoria_1000.csv", index=False)
 📜 Licencia
 Este proyecto está bajo la licencia MIT. Si lo usas o modificas, agradezco que menciones la autoría.
 
-👨‍💻 Autor
-Diego Angrino Chiran
+👨‍💻 Clase
 Maestría en Inteligencia Artificial y Ciencia de Datos
-GitHub | LinkedIn
+
