@@ -1,74 +1,97 @@
-📊 Análisis de Fuga de Cerebros en Colombia (2021–2024)
-Este proyecto realiza un proceso ETL (Extracción, Transformación y Carga) y un análisis estadístico–visual sobre la migración de profesionales colombianos al exterior (fuga de cerebros).
-El código está implementado en Python (Jupyter Notebook / VS Code) e incluye un Dashboard interactivo con Dash y Plotly.
+📊 Análisis y Dashboard de Fuga de Cerebros (Colombianos en el Exterior)
+Este proyecto implementa un proceso ETL + análisis estadístico + dashboard interactivo en Dash/Plotly sobre datos de colombianos registrados en el exterior (2021–2024).
 
-📂 Estructura del proyecto
-Proyecto_Fuga_Cerebros
-data/ # Archivos CSV y XLSX con datos iniciales y filtrados
-notebooks/ # Scripts y cuadernos Jupyter para el ETL
-dashboard/ # App interactiva con Dash
-outputs/ # Resultados exportados (CSV, Excel, Gráficos)
-colombia-municipios.json # Archivo GeoJSON para visualización geográfica
-README.md # Este archivo
+El objetivo principal es visualizar la migración de profesionales y analizar el fenómeno conocido como fuga de cerebros.
+🔧 1. Importación de librerías
+Se cargan todas las librerías necesarias para el análisis, visualización y creación del dashboard.
+python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.graph_objects as go
+import mplcursors
+import json
+from dash import Dash, dcc, html, Input, Output
 
-🛠️ Tecnologías utilizadas
-Lenguaje: Python 3.8+
-Librerías de análisis: pandas, numpy, scipy, tabulate
-Visualización: matplotlib, plotly, mplcursors, plotly.express
-Dashboards: dash (Dash + Plotly Express)
-Georreferenciación: plotly.express.scatter_mapbox con .geojson
-Exportación: openpyxl (para Excel)
-pandas
-numpy
-scipy
-matplotlib
-tabulate
-plotly
-dash
-openpyxl
-mplcursors
-ipympl
-pip install -r requirements.txt
-🗄️ Ruta del archivo de datos
-El script usa una variable data_inicial con la ruta del CSV. Actualiza la ruta si tu archivo está en otra ubicación:
-data_inicial = r”D:/Diego Angrino Chiran/…/Colombianos_registrados_en_el_exterior_20250917.csv”
-print(“Ruta del archivo CSV:”, data_inicial)
+data_inicial = (r”D:/…/Colombianos_registrados_en_el_exterior_20250917.csv”)
+data_analisis = pd.read_csv(data_inicial, sep=”;”, encoding=”ISO-8859-1”, low_memory=False)
 
-Bloque 6 — Proceso ETL y pasos principales
-```markdown
+Conversión de fechas
+data_analisis[‘Fecha de Registro’] = pd.to_datetime(data_analisis[‘Fecha de Registro’], format=’%Y-%m’, errors=’coerce’)
+data_analisis[‘Año’] = data_analisis[‘Fecha de Registro’].dt.year
 
-🔎 Proceso ETL y Análisis
-Extracción: Lectura del CSV (separador ;, codificación ISO-8859-1).
-Transformación:
-Conversión de fechas y creación de Mes_Año, Año.
-Filtrado por años (2021–2024), país (COLOMBIA), edades (18–70).
-Normalización de coordenadas y limpieza de nulos.
-Carga:
-Exportación a .csv y .xlsx.
-Generación de muestra aleatoria (1000 registros) para validación.
-📊 Visualizaciones incluidas
-Evolución anual (2021–2024).
-Distribución de edades con ajuste a curva normal (Campana de Gauss).
-Top 10 países receptores.
-Top 10 ciudades de origen.
-Mapas (burbuja / heatmap) y Sankey diagram para flujos migratorios.
-Gráficos por área de conocimiento y por género.
-▶️ Cómo ejecutar
-Ejecutar el notebook ETL (VS Code / Jupyter):
-```bash
-jupyter notebook notebooks/etl_fuga_cerebros.ipynb
+3. Filtrado de información
+Se seleccionan solo registros de Colombia, en el rango de 18–70 años y entre 2021–2024.
+filtro = (
+(data_analisis[‘Año’] >= 2021) & (data_analisis[‘Año’] <= 2024) &
+(data_analisis[‘Pais de Nacimiento’] == ‘COLOMBIA’) &
+(data_analisis[‘Edades’] >= 18) & (data_analisis[‘Edades’] <= 70)
+)
+data_analisis_copia = data_analisis[filtro]
+
+4. Estadísticas descriptivas
+Evolución anual de migración
+conteo_año = data_analisis_copia[‘Año’].value_counts().sort_index()
+
+Distribución por grupos de edad
+conteo_grupo_edad = data_analisis_copia[‘Grupo edad’].value_counts().sort_index()
+
+Distribución normal de edades
+plot_edad = data_analisis_copia[‘Edades’].dropna()
+mu, sigma = plot_edad.mean(), plot_edad.std()
+
+5. Ciudades y regiones
+Se analiza el Top 10 de ciudades con más migrantes.
+agrupacion = data_analisis_copia.groupby([‘Pais de Nacimiento’, ‘Departamento/Estado.1’, ‘Ciudad_Origen’]).size().reset_index(name=’Conteo_Región’)
+top_10_ciudades = agrupacion.nlargest(10, ‘Conteo_Región’)
+
+6. Profesionales por área de conocimiento
+Se visualizan los profesionales según área de estudio.
+top_areas = (data_analisis_copia.groupby(“Area Conocimiento”)[“Cantidad de personas”].sum().nlargest(10).reset_index())
+
+7. Flujos migratorios internacionales
+Se genera un diagrama Sankey con países de origen y destino.
+df_sankey = (
+data_analisis_copia.groupby([“Pais de Nacimiento”, “Pais”])
+[“Cantidad de personas”]
+.sum()
+.reset_index()
+)
+
+8. Mapas interactivos
+Se usa plotly.express para graficar migración por ciudades en un mapa con burbujas.
+fig = px.scatter_mapbox(
+df_grouped,
+lat=”Coordenada X”,
+lon=”Coordenada Y”,
+size=”Cantidad de personas”,
+color=”Cantidad de personas”,
+hover_name=”Ciudad_Origen”,
+mapbox_style=”open-street-map”
+)
+fig.show()
+
+9. Dashboard Interactivo (Dash)
+El dashboard permite filtrar por área de conocimiento y visualizar la evolución anual y el top 10 de países receptores.
+app = Dash(name)
+
+app.layout = html.Div([
+html.H1(“Dashboard de Migración Colombiana (2021–2024)”),
+dcc.Dropdown(id=’area-dropdown’, options=[…]),
+dcc.Graph(id=’grafico-anual’),
+dcc.Graph(id=’grafico-paises’)
+])
 python dashboard_app.py
-Bloque 9 — Exportes y outputs
-markdown
 
-💾 Exportes / Outputs
-outputs/ contiene los archivos resultantes: Excel/CSV generados por el ETL.
-Ejemplos de exportación en el código:
-data_analisis_copia.to_excel("outputs/data_analisis_copia.xlsx", index=False)
-muestra_aleatoria.to_csv("outputs/muestra_aleatoria_1000.csv", index=False)
-📜 Licencia
-Este proyecto está bajo la licencia MIT. Si lo usas o modificas, agradezco que menciones la autoría.
-
-👨‍💻 Clase
-Maestría en Inteligencia Artificial y Ciencia de Datos
+Accede en tu navegador a: http://127.0.0.1:8050/
+📦 proyecto-fuga-cerebros
+┣ 📜 README.md
+┣ 📜 requirements.txt
+┣ 📜 etl_proceso.py
+┣ 📜 dashboard_app.py
+┣ 📂 Database
+┃ ┗ 📜 Colombianos_registrados_en_el_exterior_20250917.csv
+┗ 📂 docs
+┗ 📊 imágenes de ejemplo
 
