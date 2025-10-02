@@ -1,97 +1,143 @@
-📊 Análisis y Dashboard de Fuga de Cerebros (Colombianos en el Exterior)
-Este proyecto implementa un proceso ETL + análisis estadístico + dashboard interactivo en Dash/Plotly sobre datos de colombianos registrados en el exterior (2021–2024).
+#  Proyecto ETL: Análisis de factores socioeconómicos y demográficos influyentes en la migración cualificada de Colombia.
 
-El objetivo principal es visualizar la migración de profesionales y analizar el fenómeno conocido como fuga de cerebros.
-🔧 1. Importación de librerías
-Se cargan todas las librerías necesarias para el análisis, visualización y creación del dashboard.
-python
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import plotly.express as px
-import plotly.graph_objects as go
-import mplcursors
-import json
-from dash import Dash, dcc, html, Input, Output
+Este proyecto integra varios módulos para realizar **ETL, análisis estadístico, scraping de salarios y geolocalización de municipios en Colombia**.  
+Está orientado a estudiar los **flujos migratorios de colombianos en el exterior**, los **promedios salariales por categoría laboral** y la **distribución geográfica de ciudades**.  
 
-data_inicial = (r”D:/…/Colombianos_registrados_en_el_exterior_20250917.csv”)
-data_analisis = pd.read_csv(data_inicial, sep=”;”, encoding=”ISO-8859-1”, low_memory=False)
+---
 
-Conversión de fechas
-data_analisis[‘Fecha de Registro’] = pd.to_datetime(data_analisis[‘Fecha de Registro’], format=’%Y-%m’, errors=’coerce’)
-data_analisis[‘Año’] = data_analisis[‘Fecha de Registro’].dt.year
+##  Módulos Implementados
 
-3. Filtrado de información
-Se seleccionan solo registros de Colombia, en el rango de 18–70 años y entre 2021–2024.
-filtro = (
-(data_analisis[‘Año’] >= 2021) & (data_analisis[‘Año’] <= 2024) &
-(data_analisis[‘Pais de Nacimiento’] == ‘COLOMBIA’) &
-(data_analisis[‘Edades’] >= 18) & (data_analisis[‘Edades’] <= 70)
-)
-data_analisis_copia = data_analisis[filtro]
+### 1) ETL y Análisis de Migración (`main.py`)
+- Lectura de dataset CSV con registros de colombianos en el exterior.  
+- Filtrado por años (2021–2024), edades (18–70 años) y país de nacimiento.  
+- Análisis estadístico y descriptivo:
+  - Evolución anual de registros.  
+  - Distribución de edades con curva normal ajustada.  
+  - Conteo por género, áreas de conocimiento, ciudades y países destino.  
+- Visualizaciones:
+  - Gráficos con **Matplotlib** y **Plotly**.  
+  - Mapas interactivos con **Mapbox**.  
+  - Diagrama de flujo migratorio tipo **Sankey**.  
+- Exportación a CSV/Excel.  
+- Inserción masiva de datos en **MySQL**.  
 
-4. Estadísticas descriptivas
-Evolución anual de migración
-conteo_año = data_analisis_copia[‘Año’].value_counts().sort_index()
+---
 
-Distribución por grupos de edad
-conteo_grupo_edad = data_analisis_copia[‘Grupo edad’].value_counts().sort_index()
+### 2) Web Scraping y Análisis Salarial (`scraper_salarios.py`)
+- Web scraping en **Computrabajo** para extraer salarios por categorías laborales.  
+- Extracción de **puestos, salarios promedio, rangos salariales y cantidad de registros**.  
+- Limpieza de salarios (conversión a valores enteros en COP).  
+- Cálculo de promedios salariales por categoría.  
+- Análisis comparativo con **EE.UU y Canadá**, usando **OpenAI API**:
+  - Conversión a COP con tasa de $3.900.  
+  - Relación entre diferencias salariales y flujos migratorios.  
+- Exportación de resultados a CSV/Excel.  
+- Inserción de datos en tabla **MySQL (`categ_promedi_salarial`)**.  
 
-Distribución normal de edades
-plot_edad = data_analisis_copia[‘Edades’].dropna()
-mu, sigma = plot_edad.mean(), plot_edad.std()
+---
 
-5. Ciudades y regiones
-Se analiza el Top 10 de ciudades con más migrantes.
-agrupacion = data_analisis_copia.groupby([‘Pais de Nacimiento’, ‘Departamento/Estado.1’, ‘Ciudad_Origen’]).size().reset_index(name=’Conteo_Región’)
-top_10_ciudades = agrupacion.nlargest(10, ‘Conteo_Región’)
+### 3) Geolocalización de Ciudades Colombianas (`geolocalizacion.py`)
+- Lectura de un Excel con nombres de **ciudades y departamentos**.  
+- Obtención de coordenadas **Latitud/Longitud** usando **Geopy + Nominatim**.  
+- Asignación de coordenadas ciudad por ciudad (con pausas para no saturar el servidor).  
+- Exportación a un nuevo Excel con las coordenadas geográficas.  
 
-6. Profesionales por área de conocimiento
-Se visualizan los profesionales según área de estudio.
-top_areas = (data_analisis_copia.groupby(“Area Conocimiento”)[“Cantidad de personas”].sum().nlargest(10).reset_index())
+---
 
-7. Flujos migratorios internacionales
-Se genera un diagrama Sankey con países de origen y destino.
-df_sankey = (
-data_analisis_copia.groupby([“Pais de Nacimiento”, “Pais”])
-[“Cantidad de personas”]
-.sum()
-.reset_index()
-)
+##  Requisitos
 
-8. Mapas interactivos
-Se usa plotly.express para graficar migración por ciudades en un mapa con burbujas.
-fig = px.scatter_mapbox(
-df_grouped,
-lat=”Coordenada X”,
-lon=”Coordenada Y”,
-size=”Cantidad de personas”,
-color=”Cantidad de personas”,
-hover_name=”Ciudad_Origen”,
-mapbox_style=”open-street-map”
-)
-fig.show()
+- **Python 3.8+**  
+- **MySQL Server** (si se desea cargar datos en base de datos). 
+- **XAMPP**
 
-9. Dashboard Interactivo (Dash)
-El dashboard permite filtrar por área de conocimiento y visualizar la evolución anual y el top 10 de países receptores.
-app = Dash(name)
+### Librerías necesarias **(Crear archivo requirements.txt)**
 
-app.layout = html.Div([
-html.H1(“Dashboard de Migración Colombiana (2021–2024)”),
-dcc.Dropdown(id=’area-dropdown’, options=[…]),
-dcc.Graph(id=’grafico-anual’),
-dcc.Graph(id=’grafico-paises’)
-])
-python dashboard_app.py
+```
+pandas
+numpy
+matplotlib
+tabulate
+scipy
+plotly
+ipympl
+mplcursors
+openpyxl
+mysql-connector-python
+requests
+beautifulsoup4
+geopy
+openai  
+```
 
-Accede en tu navegador a: http://127.0.0.1:8050/
-📦 proyecto-fuga-cerebros
-┣ 📜 README.md
-┣ 📜 requirements.txt
-┣ 📜 etl_proceso.py
-┣ 📜 dashboard_app.py
-┣ 📂 Database
-┃ ┗ 📜 Colombianos_registrados_en_el_exterior_20250917.csv
-┗ 📂 docs
-┗ 📊 imágenes de ejemplo
+Instalación:
 
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Estructura del Proyecto
+
+```
+Proyecto_ETL_INFERENCIA_ESTADISTICA/
+│
+├── Database/
+│   ├── Colombianos_registrados_en_el_exterior_20250917.csv
+│   ├── Dataframe_Fracmentados_filtrados/
+│   ├── muestra_aleatoria_1000.*
+│   └── validacion_municipios.xlsx
+│
+├── Recopilación_Geolocalizacion/
+│   └── colombia-municipios.json
+│
+├── main.py                # ETL + análisis migración
+├── scraper_salarios.py    # Web Scraping de salarios
+├── geolocalizacion.py     # Geolocalización de municipios colombianos
+└── README.md
+```
+
+---
+
+## Ejecución
+
+### 1. **Análisis Migratorio**
+```bash
+python main.py
+```
+
+### 2. **Scraping y Análisis Salarial**
+```bash
+python scraper_salarios.py
+```
+
+### 3. **Geolocalización de Municipios**
+```bash
+python geolocalizacion.py
+```
+
+---
+
+## Resultados
+
+- **Migración** → Gráficos anuales, distribución de edades, top ciudades y países destino.  
+- **Salarios** → Promedios por categoría laboral, comparación internacional con EE.UU y Canadá.  
+- **Geolocalización** → Archivo Excel con coordenadas actualizadas (lat/lon) de municipios colombianos.  
+
+---
+
+## Contribución
+
+1. Haz un **fork** del repositorio.  
+2. Crea una rama:  
+   ```bash
+   git checkout -b feature/nueva-funcionalidad
+   ```  
+3. Envía un **Pull Request**.  
+
+---
+
+## Licencia
+
+Este proyecto se distribuye bajo licencia **MIT**.  
+Libre para uso académico y profesional.  
