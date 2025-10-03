@@ -110,6 +110,8 @@ Proyecto_ETL_Fuga_de_Cerebros/
 
 ## Ejecución (SE RECOMIENDA Ejecutar como archivo JUPYTER e instalar todas las librerias requeridas para el proceso) 
 
+### Los Script .py se encuentran estructurados de manera que se ejecuten como cuaderno Jupiter pero desde el VSCODE para llevar un mejor seguimiento y mostrar el paso a paso de la ejecución del PROCESO.
+
 ### 1. **Análisis Migratorio**
 ```bash
 python main.py
@@ -126,8 +128,9 @@ python geolocalizacion.py
 ```
 ---
 
-## Notebooks disponibles
+## Notebooks disponibles 
 
+### Tener presente que las librerias que se utilizan en colab o entornos ONLINE a veces no son compatibles con las que se ejecutan en VSCODE
 - [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/carlostrujillo-academy/Proyecto_ETL_Fuga_de_Cerebros/blob/main/Notebook/main.ipynb)`main.ipynb`
 - [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/carlostrujillo-academy/Proyecto_ETL_Fuga_de_Cerebros/blob/main/Notebook/Scrapean_Computrabajo.ipynb) `scraper_salarios.ipynb`
 - [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/carlostrujillo-academy/Proyecto_ETL_Fuga_de_Cerebros/blob/main/Notebook/Coordenadas_munici.ipynb) `geolocalizacion.ipynb`
