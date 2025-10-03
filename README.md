@@ -115,6 +115,7 @@ python scraper_salarios.py
 ```bash
 python geolocalizacion.py
 ```
+---
 
 ## Notebooks disponibles
 
