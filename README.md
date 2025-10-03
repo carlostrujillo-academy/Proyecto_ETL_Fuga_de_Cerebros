@@ -1,4 +1,4 @@
-#  Proyecto ETL: Análisis de factores socioeconómicos y demográficos influyentes en la migración cualificada de Colombia.
+<img width="1061" height="105" alt="image" src="https://github.com/user-attachments/assets/c083bb1f-8116-457c-98a7-0f7b78293861" />#  Proyecto ETL: Análisis de factores socioeconómicos y demográficos influyentes en la migración cualificada de Colombia.
 
 Este proyecto integra varios módulos para realizar **ETL, análisis estadístico, scraping de salarios y geolocalización de municipios en Colombia**.  
 Está orientado a estudiar los **flujos migratorios de colombianos en el exterior**, los **promedios salariales por categoría laboral** y la **distribución geográfica de ciudades**.  
@@ -142,6 +142,22 @@ python geolocalizacion.py
 - **Migración** → Gráficos anuales, distribución de edades, top ciudades y países destino.  
 - **Salarios** → Promedios por categoría laboral, comparación internacional con EE.UU y Canadá.  
 - **Geolocalización** → Archivo Excel con coordenadas actualizadas (lat/lon) de municipios colombianos.  
+
+---
+
+## Hallazgos
+
+- **Concentración Geográfica y de Género** → El fenómeno se origina principalmente en Bogotá D.C. y Santiago de Cali, y la población migrante es predominantemente Masculina (el género más representado en la fuga).
+- **Éxodo en Áreas de Gestión** → La mayor fuga de talento se da en las áreas de Economía, Administración y Contaduría (junto con las Ciencias Sociales), lo que indica una falta de absorción o valoración del talento gerencial y de gestión.  
+- **Atracción Principal: Estados Unidos** → Estados Unidos es el destino principal y el mayor imán de atracción, superando significativamente la migración hacia Canadá, Australia y Sudáfrica. Esto consolida a EE. UU. como el referente de "mejor estilo de vida" y oportunidades.
+
+---
+
+## Recomendaciones
+
+- Valorizar de la mano de obra nacional en proporción al incremento en el costo de vida.
+- Generar incentivos para el desarrollo de innovación e investigación científica y tecnológica.
+- Generar incentivos para la creación de empresa y la inversión de proyectos a nivel nacional.
 
 ---
 
