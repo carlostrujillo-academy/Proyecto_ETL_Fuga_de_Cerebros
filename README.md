@@ -116,6 +116,12 @@ python scraper_salarios.py
 python geolocalizacion.py
 ```
 
+## Notebooks disponibles
+
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cetrujillo/Proyecto_ETL_INFERENCIA_ESTADISTICA/blob/main/src/main.ipynb) `main.ipynb`
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cetrujillo/Proyecto_ETL_INFERENCIA_ESTADISTICA/blob/main/src/scraper_salarios.ipynb) `scraper_salarios.ipynb`
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cetrujillo/Proyecto_ETL_INFERENCIA_ESTADISTICA/blob/main/src/geolocalizacion.ipynb) `geolocalizacion.ipynb`
+
 ---
 
 ## Resultados
