@@ -80,21 +80,30 @@ pip install -r requirements.txt
 ## Estructura del Proyecto
 
 ```
-Proyecto_ETL_INFERENCIA_ESTADISTICA/
+Proyecto_ETL_Fuga_de_Cerebros/
 │
-├── Database/
-│   ├── Colombianos_registrados_en_el_exterior_20250917.csv
-│   ├── Dataframe_Fracmentados_filtrados/
-│   ├── muestra_aleatoria_1000.*
-│   └── validacion_municipios.xlsx
+├── Notebook/                     # Notebooks convertidos (.ipynb)
+│   ├── main.ipynb
+│   ├── scraper_salarios.ipynb
+│   └── geolocalizacion.ipynb
 │
-├── Recopilación_Geolocalizacion/
-│   └── colombia-municipios.json
+├── data/                         # Datos de entrada
+│   ├── import/                   # Datos originales o brutos (raw)
+│   │   ├── migracion.zip
+│   │   └── validacion_municipios.xlsx
+│   ├── export/                # Datos procesados/listos para análisis
+│   │   └── promedios_salariales_categ_colombia.csv
+│   └── README.md                 # explica cada dataset
 │
-├── main.py                # ETL + análisis migración
-├── scraper_salarios.py    # Web Scraping de salarios
-├── geolocalizacion.py     # Geolocalización de municipios colombianos
-└── README.md
+├── src/                          # Scripts de código Python
+│   ├── main.py                   # Script principal ETL
+│   ├── scraper_salarios.py       # Scraping y limpieza de salarios
+│   └── geolocalizacion.py        # Geolocalización de ciudades
+│
+├── requirements.txt              # librerías necesarias para correr el proyecto
+├── README.md                     # guía principal del proyecto
+└── LICENSE (opcional)            # licencia del repositorio
+
 ```
 
 ---
