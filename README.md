@@ -1,4 +1,4 @@
-<img width="1061" height="105" alt="image" src="https://github.com/user-attachments/assets/c083bb1f-8116-457c-98a7-0f7b78293861" />#  Proyecto ETL: Análisis de factores socioeconómicos y demográficos influyentes en la migración cualificada de Colombia.
+#  Proyecto ETL: Análisis de factores socioeconómicos y demográficos influyentes en la migración cualificada de Colombia.
 
 Este proyecto integra varios módulos para realizar **ETL, análisis estadístico, scraping de salarios y geolocalización de municipios en Colombia**.  
 Está orientado a estudiar los **flujos migratorios de colombianos en el exterior**, los **promedios salariales por categoría laboral** y la **distribución geográfica de ciudades**.  
