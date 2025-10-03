@@ -108,7 +108,7 @@ Proyecto_ETL_Fuga_de_Cerebros/
 
 ---
 
-## Ejecución
+## Ejecución (SE RECOMIENDA Ejecutar como archivo JUPYTER e instalar todas las librerias requeridas para el proceso) 
 
 ### 1. **Análisis Migratorio**
 ```bash
