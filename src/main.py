@@ -24,7 +24,7 @@ pd.set_option('display.max_rows', 100)      # Mostrar hasta 100 filas al imprimi
 # %% 
 # =====Extracción de datos desde un archivo CSV
 # Definición de la ruta del archivo CSV
-data_inicial = (r"C:/Users/cetd9/OneDrive/MAESTRIA IA y CD/SEMESTRE 1/Proyecto_ETL_INFERENCIA_ESTADISTICA/Database/Colombianos_registrados_en_el_exterior_20250917.csv")
+data_inicial = (r"RUTA_QUE_REQUIERA_PARA_CORRER_COD_MANERA_LOCAL/Colombianos_registrados_en_el_exterior_20250917.csv")
 print(data_inicial)
 print("Ruta del archivo CSV:", data_inicial)
 
@@ -70,7 +70,7 @@ print(data_analisis_copia.head(1000))
 # %%
 # ==========Creacion de df con los datos filtrados
 # Exporte del DataFrame filtrado a un archivo CSV
-data_analisis_copia_to_excel = data_analisis_copia.to_excel(r"C:/Users/cetd9/OneDrive/MAESTRIA IA y CD/SEMESTRE 1/Proyecto_ETL_INFERENCIA_ESTADISTICA/Database/Dataframe_Fracmentados_filtrados/data_analisis_copia.xlsx", index=False, engine='openpyxl')
+data_analisis_copia_to_excel = data_analisis_copia.to_excel(r"RUTA_QUE_REQUIERA_PARA_CORRER_COD_MANERA_LOCAL/data_analisis_copia.xlsx", index=False, engine='openpyxl')
 print("Filas:", data_analisis_copia.shape[0])
 print("Columnas:", data_analisis_copia.shape[1])
 print("Total de datos (celdas):", data_analisis_copia.size)
@@ -477,7 +477,7 @@ fig.show()
 #%%
 
 #Cargue de .geojson de Departamentos de Colombia.
-ruta_geojson = r"C:/Users/cetd9/OneDrive/MAESTRIA IA y CD/SEMESTRE 1/Proyecto_ETL_INFERENCIA_ESTADISTICA/Recopilación_Geolocalizacion/colombia-municipios.json"
+ruta_geojson = r"RUTA_QUE_REQUIERA_PARA_CORRER_COD_MANERA_LOCAL/Recopilación_Geolocalizacion/colombia-municipios.json"
 
 with open(ruta_geojson, "r", encoding="utf-8") as f:
     colombia_geojson = json.load(f)
@@ -532,8 +532,8 @@ print(muestra_aleatoria)
 
 # %% 
 #===========Exporte de la muestra aleatoria a un archivo CSV
-muestra_aleatoria.to_csv(r"C:/Users/cetd9/OneDrive/MAESTRIA IA y CD/SEMESTRE 1/Proyecto_ETL_INFERENCIA_ESTADISTICA/Database/muestra_aleatoria_1000.csv", index=False, encoding='utf-8-sig')
-muestra_aleatoria.to_excel(r"C:/Users/cetd9/OneDrive/MAESTRIA IA y CD/SEMESTRE 1/Proyecto_ETL_INFERENCIA_ESTADISTICA/Database/muestra_aleatoria_1000.xlsx", index=False, engine='openpyxl')
+muestra_aleatoria.to_csv(r"RUTA_QUE_REQUIERA_PARA_CORRER_COD_MANERA_LOCAL/Database/muestra_aleatoria_1000.csv", index=False, encoding='utf-8-sig')
+muestra_aleatoria.to_excel(r"RUTA_QUE_REQUIERA_PARA_CORRER_COD_MANERA_LOCAL/Database/muestra_aleatoria_1000.xlsx", index=False, engine='openpyxl')
 
 #%% 
 # Conversión de fecha de registro a formato objeto datetime
